@@ -3,9 +3,18 @@ import { db } from "../db/index.ts";
 import { usersTable } from "../models/user.model.ts";
 import { eq } from "drizzle-orm";
 import { createHmac, randomBytes } from "node:crypto";
+import { signupPostRequestBodySchema } from "../validation/request.validation.ts";
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { firstname, lastname, email, password } = req.body;
+  const validationResult = await signupPostRequestBodySchema.safeParseAsync(
+    req.body
+  );
+
+  if(validationResult.error) {
+    return res.status(400).json({ error: validationResult.error.format() });
+  }
+
+  const { firstname, lastname, email, password } = validationResult.data;
 
   const [existingUser] = await db
     .select({
@@ -36,7 +45,7 @@ export const registerUser = async (req: Request, res: Response) => {
       id: usersTable.id,
     });
 
-  return res.status(201).json({data: {userId: user.id}});
+  return res.status(201).json({ data: { userId: user.id } });
 };
 
 export const loginUser = async (req: Request, res: Response) => {
