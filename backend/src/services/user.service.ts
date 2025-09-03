@@ -1,7 +1,7 @@
 import { db } from "../db/index.ts";
 import { usersTable } from "../models/user.model.ts";
 import { eq } from "drizzle-orm";
-import User from "../types/user.js";
+import { User } from "../types/user.js";
 
 export async function getUserByEmail(email: string) {
   try {

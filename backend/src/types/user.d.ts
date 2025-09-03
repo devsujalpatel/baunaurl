@@ -1,4 +1,6 @@
-interface User {
+import { Request } from "express";
+
+export interface User {
   firstname: string;
   lastname?: string;
   email: string;
@@ -6,4 +8,3 @@ interface User {
   salt: string;
 }
 
-export default User;

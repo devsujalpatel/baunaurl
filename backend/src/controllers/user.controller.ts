@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 
 import {
   signupPostRequestBodySchema,
   loginPostRequestBodySchema,
 } from "../validation/request.validation.ts";
-import { hashPasswordWithSalt, matchPassword } from "../utils/hash.ts";
+import { hashPasswordWithSalt } from "../utils/hash.ts";
 import { createUser, getUserByEmail } from "../services/user.service.ts";
+import { createUserToken } from "../utils/token.ts";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -64,15 +64,20 @@ export const loginUser = async (req: Request, res: Response) => {
         .json({ error: `User with email: ${email} does not exists` });
     }
 
-    const { salt, hashedPassword } = existingUser;
+    const { salt: userSalt, hashedPassword } = existingUser;
 
-    const { newHashedPassword } = matchPassword(password, salt, hashedPassword);
+    const { hashedPassword: newHashedPassword } = hashPasswordWithSalt(
+      password,
+      userSalt
+    );
 
     if (hashedPassword !== newHashedPassword) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    return res.status(200).json({ data: { userId: existingUser.id } });
+    const token = await createUserToken({ id: existingUser.id });
+
+    return res.status(200).json({ token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
