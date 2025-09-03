@@ -16,22 +16,26 @@ export function authenticationMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  const authHeader = req.headers["authorization"];
+  // const authHeader = req.headers["authorization"];
 
-  if (!authHeader) {
-    return next();
-  }
+  const cookieToken = req.cookies.token;
 
-  if (!authHeader.startsWith("Bearer ")) {
-    return res
-      .status(400)
-      .json({ error: "Authorization header must start with Bearer" });
-  }
+  console.log(cookieToken);
 
-  const token = authHeader.split(" ")[1];
+  // if (!authHeader) {
+  //   return next();
+  // }
+
+  // if (!authHeader.startsWith("Bearer ")) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Authorization header must start with Bearer" });
+  // }
+
+  // const token = authHeader.split(" ")[1];
 
   try {
-    const payload = verifyToken(token);
+    const payload = verifyToken(cookieToken);
     req.user = payload;
   } catch (err) {
     return res.status(401).json({ error: "Invalid or expired token" });

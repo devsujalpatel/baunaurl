@@ -77,6 +77,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const token = await createUserToken({ id: existingUser.id });
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({ token });
   } catch (error) {
     console.error(error);
@@ -85,7 +92,7 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const logoutUser = async (req: Request, res: Response) => {
-  res.send("Register");
+  res.send("logout");
 };
 
 export const updateUser = async (req: Request, res: Response) => {

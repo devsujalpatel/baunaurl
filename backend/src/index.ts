@@ -1,9 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-
+import cookieParser from "cookie-parser";
 // Routers
 import userRouter from "./routes/user.route.ts";
-import { authenticationMiddleware } from "./middlewares/auth.middleware.ts";
 
 const app = express();
 dotenv.config();
@@ -11,7 +10,7 @@ dotenv.config();
 const PORT = process.env.PORT! ?? 8080;
 
 app.use(express.json());
-app.use(authenticationMiddleware);
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
