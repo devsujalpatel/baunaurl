@@ -3,9 +3,14 @@ import { Request, Response } from "express";
 import {
   signupPostRequestBodySchema,
   loginPostRequestBodySchema,
+  userUpdatePatchRequestBodySchema,
 } from "../validation/request.validation.ts";
 import { hashPasswordWithSalt } from "../utils/hash.ts";
-import { createUser, getUserByEmail } from "../services/user.service.ts";
+import {
+  createUser,
+  getUserByEmail,
+  getUserById,
+} from "../services/user.service.ts";
 import { createUserToken } from "../utils/token.ts";
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -103,6 +108,3 @@ export const logoutUser = async (req: Request, res: Response) => {
   return res.status(200).json({ message: "Logout successful" });
 };
 
-export const updateUser = async (req: Request, res: Response) => {
-  res.send("Register");
-};

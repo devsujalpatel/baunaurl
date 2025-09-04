@@ -54,3 +54,23 @@ export async function createUser({
   }
 }
 
+export async function getUserById(id: string) {
+  try {
+    const [user] = await db
+      .select({
+        id: usersTable.id,
+        firsname: usersTable.firstname,
+        lastname: usersTable.lastname,
+        email: usersTable.email,
+        salt: usersTable.salt,
+        hashedPassword: usersTable.password,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, id));
+
+    return user;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

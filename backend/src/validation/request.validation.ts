@@ -16,3 +16,8 @@ export const shortenPostRequestBodySchema = z.object({
   url: z.string().url("Invalid URL"),
   code: z.string().optional(),
 });
+
+export const userUpdatePatchRequestBodySchema = z.object({
+  firstname: z.string().optional(),
+  lastname: z.string().optional(),
+});
