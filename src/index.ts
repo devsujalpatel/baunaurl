@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
   res.send("Welcome To URL SHORTNER");
 });
 
-app.use("/api/user", userRouter);
+app.use("/user", userRouter);
 app.use(urlRoutes);
 
 app.listen(PORT, () => {
