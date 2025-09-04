@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/token.ts";
-import { JwtPayload } from "jsonwebtoken";
 
 // Extend Express Request type
 declare global {
   namespace Express {
     interface Request {
-      user?: string | JwtPayload;
+      user?: {
+        id: string;
+      };
     }
   }
 }
@@ -16,20 +17,30 @@ export function authenticationMiddleware(
   res: Response,
   next: NextFunction
 ) {
- 
-
   const cookieToken = req.cookies.token;
 
-  if(!cookieToken) {
+  if (!cookieToken) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
     const payload = verifyToken(cookieToken);
     req.user = payload;
+
+    return next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid or expired token" });
   }
+}
 
-  return next();
+export function ensureAuthenticated(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ error: "You are not logged in" });
+  }
+
+  next();
 }

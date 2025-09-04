@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { userTokenSchema } from "../validation/token.validation.ts";
+
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 export const createUserToken = async (payload: object) => {
@@ -17,10 +18,14 @@ export const createUserToken = async (payload: object) => {
 };
 
 export const verifyToken = (token: string) => {
-  try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    return payload;
-  } catch (error) {
-    throw null;
+  const decoded = jwt.verify(token, JWT_SECRET);
+
+  // jwt.verify can return string | JwtPayload, so validate with Zod
+  const result = userTokenSchema.safeParse(decoded);
+
+  if (!result.success) {
+    throw new Error("Invalid token payload");
   }
+
+  return result.data;
 };

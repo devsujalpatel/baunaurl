@@ -25,7 +25,7 @@ export const registerUser = async (req: Request, res: Response) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: `User with email: ${email} does not exists` });
+        .json({ error: `User with email: ${email} already exists` });
     }
 
     const { salt, hashedPassword } = hashPasswordWithSalt(password);

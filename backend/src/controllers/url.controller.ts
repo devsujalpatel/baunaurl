@@ -1,0 +1,43 @@
+import { Request, Response } from "express";
+import { nanoid } from "nanoid";
+import { shortenPostRequestBodySchema } from "../validation/request.validation.ts";
+import { createShorten, getUrlByShortCode } from "../services/url.service.ts";
+
+export const shortenUrl = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+
+    const validationResult = await shortenPostRequestBodySchema.safeParseAsync(
+      req.body
+    );
+
+    if (validationResult.error) {
+      return res.status(400).json({ error: validationResult.error.format() });
+    }
+
+    const { url, code } = validationResult.data;
+    const shortCode = code ?? nanoid(6);
+
+    const existingShortCode = await getUrlByShortCode(shortCode);
+    if (existingShortCode) {
+      return res.status(400).json({ error: "This code already exits" });
+    }
+
+    const result = await createShorten(shortCode, url, userId);
+
+    return res.status(201).json({
+      id: result.id,
+      shortCode: result.shortCode,
+      targetUrl: result.targetUrl,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getUrls = async (req: Request, res: Response) => {};
+
+export const redirectToUrl = async (req: Request, res: Response) => {};
+
+export const deleteUrl = async (req: Request, res: Response) => {};
