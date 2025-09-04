@@ -40,3 +40,39 @@ export async function createShorten(
 
   return result;
 }
+
+export const getAllUrls = async (id: string) => {
+  try {
+    const codes = await db
+      .select()
+      .from(urlsTable)
+      .where(eq(urlsTable.userId, id));
+
+    return codes;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getUrlById = async (id: string) => {
+  try {
+    const [url] = await db.select().from(urlsTable).where(eq(urlsTable.id, id));
+
+    return url;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const deleteUrlById = async (id: string) => {
+  try {
+    await db.delete(urlsTable).where(eq(urlsTable.id, id));
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

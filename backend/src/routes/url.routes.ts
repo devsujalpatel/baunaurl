@@ -18,12 +18,12 @@ router.post(
   ensureAuthenticated,
   shortenUrl
 );
-router.get("/urls", authenticationMiddleware, ensureAuthenticated, getUrls);
+router.get("/codes", authenticationMiddleware, ensureAuthenticated, getUrls);
 
 router.get("/:shortCode", redirectToUrl);
 
 router.delete(
-  "/urls/:id",
+  "/codes/:id",
   authenticationMiddleware,
   ensureAuthenticated,
   deleteUrl

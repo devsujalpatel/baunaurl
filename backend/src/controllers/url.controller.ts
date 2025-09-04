@@ -1,7 +1,14 @@
 import { Request, Response } from "express";
 import { nanoid } from "nanoid";
 import { shortenPostRequestBodySchema } from "../validation/request.validation.ts";
-import { createShorten, getUrlByShortCode } from "../services/url.service.ts";
+import {
+  createShorten,
+  getUrlByShortCode,
+  getAllUrls,
+  getUrlById,
+  deleteUrlById,
+} from "../services/url.service.ts";
+
 
 export const shortenUrl = async (req: Request, res: Response) => {
   try {
@@ -36,8 +43,38 @@ export const shortenUrl = async (req: Request, res: Response) => {
   }
 };
 
-export const getUrls = async (req: Request, res: Response) => {};
+export const getUrls = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
 
-export const redirectToUrl = async (req: Request, res: Response) => {};
+    const urls = await getAllUrls(userId);
 
-export const deleteUrl = async (req: Request, res: Response) => {};
+    return res.status(200).json({ data: urls });
+  } catch (error) {}
+};
+
+export const redirectToUrl = async (req: Request, res: Response) => {
+  const code = req.params.shortCode;
+
+  const url = await getUrlByShortCode(code);
+
+  if (!url) {
+    return res.status(404).json({ error: "Url Not Found" });
+  }
+
+  return res.redirect(url.targetUrl);
+};
+
+export const deleteUrl = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const url = await getUrlById(id);
+
+  if (!url) {
+    return res.status(404).json({ error: "Url Not Found" });
+  }
+
+  await deleteUrlById(id);
+
+  return res.status(200).json({ message: "Url deleted successfully" });
+};
