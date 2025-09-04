@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 // Routers
 import userRouter from "./routes/user.route.js";
@@ -11,8 +12,16 @@ dotenv.config();
 
 const PORT = process.env.PORT! ?? 8080;
 
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: true, 
+    credentials: true, 
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Welcome To URL SHORTNER");

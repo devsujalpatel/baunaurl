@@ -5,10 +5,7 @@ import {
   loginPostRequestBodySchema,
 } from "../validation/request.validation.js";
 import { hashPasswordWithSalt } from "../utils/hash.js";
-import {
-  createUser,
-  getUserByEmail,
-} from "../services/user.service.js";
+import { createUser, getUserByEmail } from "../services/user.service.js";
 import { createUserToken } from "../utils/token.js";
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -80,16 +77,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const token = await createUserToken({ id: existingUser.id });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    return res
-      .status(200)
-      .json({ message: "Login successful", data: { userId: existingUser.id } });
+    return res.status(200).json({ token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -105,4 +93,3 @@ export const logoutUser = async (req: Request, res: Response) => {
 
   return res.status(200).json({ message: "Logout successful" });
 };
-

@@ -17,14 +17,20 @@ export function authenticationMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  const cookieToken = req.cookies.token;
+  const tokenHeaders = req.headers["authorization"];
 
-  if (!cookieToken) {
+  if (!tokenHeaders) {
     return res.status(401).json({ error: "You are not logged in" });
   }
 
+  if (!tokenHeaders.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Invalid token format" });
+  }
+
+  const token = tokenHeaders.split(" ")[1];
+
   try {
-    const payload = verifyToken(cookieToken);
+    const payload = verifyToken(token);
     req.user = payload;
 
     return next();
