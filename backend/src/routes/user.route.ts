@@ -3,8 +3,8 @@ import {
   loginUser,
   logoutUser,
   registerUser,
-} from "../controllers/user.controller.ts";
-import { authenticationMiddleware } from "../middlewares/auth.middleware.ts";
+} from "../controllers/user.controller.js";
+import { authenticationMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 

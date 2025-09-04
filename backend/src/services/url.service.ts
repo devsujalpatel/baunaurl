@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
-import { db } from "../db/index.ts";
-import { urlsTable } from "../models/url.model.ts";
+import { db } from "../db/index.js";
+import { urlsTable } from "../models/url.model.js";
 
 export async function getUrlByShortCode(shortCode: string) {
   try {

@@ -1,5 +1,5 @@
-import { db } from "../db/index.ts";
-import { usersTable } from "../models/user.model.ts";
+import { db } from "../db/index.js";
+import { usersTable } from "../models/user.model.js";
 import { eq } from "drizzle-orm";
 import { User } from "../types/user.js";
 

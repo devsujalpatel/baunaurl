@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 // Routers
-import userRouter from "./routes/user.route.ts";
-import urlRoutes from "./routes/url.routes.ts";
+import userRouter from "./routes/user.route.js";
+import urlRoutes from "./routes/url.routes.js";
 
 const app = express();
 dotenv.config();

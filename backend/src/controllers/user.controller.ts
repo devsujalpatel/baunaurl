@@ -3,15 +3,13 @@ import { Request, Response } from "express";
 import {
   signupPostRequestBodySchema,
   loginPostRequestBodySchema,
-  userUpdatePatchRequestBodySchema,
-} from "../validation/request.validation.ts";
-import { hashPasswordWithSalt } from "../utils/hash.ts";
+} from "../validation/request.validation.js";
+import { hashPasswordWithSalt } from "../utils/hash.js";
 import {
   createUser,
   getUserByEmail,
-  getUserById,
-} from "../services/user.service.ts";
-import { createUserToken } from "../utils/token.ts";
+} from "../services/user.service.js";
+import { createUserToken } from "../utils/token.js";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {

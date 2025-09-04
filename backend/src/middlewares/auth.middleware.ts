@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/token.ts";
+import { verifyToken } from "../utils/token.js";
 
 // Extend Express Request type
 declare global {

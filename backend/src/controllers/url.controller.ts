@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { nanoid } from "nanoid";
-import { shortenPostRequestBodySchema } from "../validation/request.validation.ts";
+import { shortenPostRequestBodySchema } from "../validation/request.validation.js";
 import {
   createShorten,
   getUrlByShortCode,
   getAllUrls,
   getUrlById,
   deleteUrlById,
-} from "../services/url.service.ts";
+} from "../services/url.service.js";
 
 export const shortenUrl = async (req: Request, res: Response) => {
   try {

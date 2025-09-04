@@ -4,11 +4,11 @@ import {
   getUrls,
   redirectToUrl,
   shortenUrl,
-} from "../controllers/url.controller.ts";
+} from "../controllers/url.controller.js";
 import {
   authenticationMiddleware,
   ensureAuthenticated,
-} from "../middlewares/auth.middleware.ts";
+} from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
