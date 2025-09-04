@@ -16,23 +16,13 @@ export function authenticationMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  // const authHeader = req.headers["authorization"];
+ 
 
   const cookieToken = req.cookies.token;
 
-  console.log(cookieToken);
-
-  // if (!authHeader) {
-  //   return next();
-  // }
-
-  // if (!authHeader.startsWith("Bearer ")) {
-  //   return res
-  //     .status(400)
-  //     .json({ error: "Authorization header must start with Bearer" });
-  // }
-
-  // const token = authHeader.split(" ")[1];
+  if(!cookieToken) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   try {
     const payload = verifyToken(cookieToken);
