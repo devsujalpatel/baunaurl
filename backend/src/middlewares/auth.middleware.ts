@@ -20,7 +20,7 @@ export function authenticationMiddleware(
   const cookieToken = req.cookies.token;
 
   if (!cookieToken) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json({ error: "You are not logged in" });
   }
 
   try {
