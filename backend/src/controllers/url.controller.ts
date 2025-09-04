@@ -9,7 +9,6 @@ import {
   deleteUrlById,
 } from "../services/url.service.ts";
 
-
 export const shortenUrl = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
@@ -68,13 +67,14 @@ export const redirectToUrl = async (req: Request, res: Response) => {
 export const deleteUrl = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const url = await getUrlById(id);
+  const url = await getUrlById(id, req.user!.id);
 
   if (!url) {
     return res.status(404).json({ error: "Url Not Found" });
   }
 
-  await deleteUrlById(id);
+  await deleteUrlById(id, req.user!.id);
 
   return res.status(200).json({ message: "Url deleted successfully" });
 };
+

@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../db/index.ts";
 import { urlsTable } from "../models/url.model.ts";
 
@@ -55,9 +55,12 @@ export const getAllUrls = async (id: string) => {
   }
 };
 
-export const getUrlById = async (id: string) => {
+export const getUrlById = async (id: string, userId: string) => {
   try {
-    const [url] = await db.select().from(urlsTable).where(eq(urlsTable.id, id));
+    const [url] = await db
+      .select()
+      .from(urlsTable)
+      .where(and(eq(urlsTable.id, id), eq(urlsTable.userId, userId)));
 
     return url;
   } catch (error) {
@@ -66,9 +69,11 @@ export const getUrlById = async (id: string) => {
   }
 };
 
-export const deleteUrlById = async (id: string) => {
+export const deleteUrlById = async (id: string, userId: string) => {
   try {
-    await db.delete(urlsTable).where(eq(urlsTable.id, id));
+    await db
+      .delete(urlsTable)
+      .where(and(eq(urlsTable.id, id), eq(urlsTable.userId, userId)));
 
     return true;
   } catch (error) {
